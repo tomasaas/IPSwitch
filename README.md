@@ -41,10 +41,34 @@ Innstillingene ligger i `%APPDATA%\IPSwitch\config.json` (Linux: `~/.config/IPSw
 
 ## Kjøre fra kildekode
 
+### Enkel oppstart på Windows
+
+Installer **Python 3.12 eller nyere** hvis du ikke allerede har det. Dobbeltklikk deretter på **`Start-IPSwitch.cmd`** i repo-mappen. Den:
+
+- oppretter og aktiverer `.venv` ved behov,
+- installerer appens avhengigheter første gang og når `requirements.txt` endres,
+- lager **IPSwitch** på skrivebordet med appens `.ico`-ikon,
+- starter appen, som selv ber om administrator-tilgang.
+
+Bruk skrivebordssnarveien ved senere oppstart. Første oppsett krever internett; vanlig oppstart bruker det lokale miljøet. Snarveien starter med et minimert PowerShell-vindu som lukkes når appen er startet. Repo-mappen må bli liggende; flytter du den, kjør `Start-IPSwitch.cmd` igjen for å oppdatere snarveien.
+
+`.venv` følger ikke med når du kloner: miljøet er maskinavhengig og opprettes lokalt. Ingen bygging av `.exe` er nødvendig. Startfilene endrer ikke maskinens permanente PowerShell-policy.
+
+Du kan også starte fra PowerShell:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Start-IPSwitch.ps1
+# Bare sett opp miljøet og skrivebordssnarveien, uten å starte appen:
+powershell -NoProfile -ExecutionPolicy Bypass -File .\Start-IPSwitch.ps1 -SetupOnly -CreateDesktopShortcut
+```
+
+### Manuelt oppsett / utvikling
+
 ```
 py -3.12 -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 .venv\Scripts\python main.py          # ber om administrator-tilgang (UAC) ved start
+.venv\Scripts\pip install -r requirements-dev.txt  # kun for tester og exe-bygging
 .venv\Scripts\python -m pytest        # tester
 ```
 
